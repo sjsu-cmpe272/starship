@@ -1,0 +1,17 @@
+---
+  - name: terminating an EC2 Instance
+    hosts: localhost
+    connection: local
+    gather_facts: False
+    tags: terminating
+    # Task that will be used to terminate an EC2 Instance
+    tasks:
+
+      - action: ec2_facts
+      - name: terminate ec2 instance
+        local_action:
+          module: ec2
+          instance_ids: i-********
+          region: us-west-2
+          state: absent
+                                                                                                                                                                                
