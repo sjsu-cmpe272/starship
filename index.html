@@ -1,211 +1,27 @@
+<!DOCTYPE html>
 <html>
+
 <head>
-<title>Twitter Client 1.0</title>
+
+  <title>Realtime communication with WebRTC</title>
+
+  <link rel="stylesheet" href="/css/main.css" />
+
 </head>
-<body bgcolor=white>
 
-<table border="0">
-<tr>
-<td>
-<h1>Twitter Client </h1>
-</td>
-</tr>
-</table>
-<table>
-    <tr>
-        <h3>REST Auth Headers</h3>
-        <ul style="list-style-type:none">
+<body>
 
-        <li><h3>oAuth_consumer_key</h3>
-        <input type="text" id="oAuth_consumer_key" name="oAuth_consumer_key" />
-        <h3>oAuth_nonce</h3>
-        <input type="text" id="oAuth_nonce" name="oAuth_nonce" />
-        <h3>oAuth_Signature</h3>
-        <input type="text" id="oAuth_Signature" name="oAuth_Signature" />
-        <h3>oAuth_Sinature_Method</h3>
-        <input type="text" id="oAuth_Sinature_Method" name="oAuth_Sinature_Method" />
-        <h3>oAuth_Token</h3>
-        <input type="text" id="oAuth_Token" name="oAuth_Token" />
-        </li>
-        </ul>
-    </tr>
-    <!-- First REST call -->
-    <tr>
-        <h3>1) Returns up to 100 of the first retweets of a given tweet</h3>
-        <ul style="list-style-type:none">
-            <h3>URL: https://api.twitter.com/1.1/statuses/retweets/:id.json</h3>
-            <li>
-                <h4>Request Parameters:</h4>
-                <form action="TwitterGetView1.jsp" method="GET">
-                    <h4>id(*)</h4>
-                    <input type="text" id="rest1id" name="rest1id" />
-                    <h4>count</h4>
-                    <input type="text" id="rest1count" name="rest1count" />
-                    <h4>trim_user</h4>
-                    <INPUT type="radio" name="rest1q1" value="0" id="rest1q1_true">&nbsp;<label for="rest1q1_true">True</label><BR>
-                    <INPUT type="radio" name="rest1q1" value="1" id="rest1q1_false">&nbsp;<label for="rest1q1_false">False</label><BR>
-                    <input type="submit" value="GET" />
-                </form>
-            </li>
-        </ul>
-    </tr>
+  <h1>Realtime communication with WebRTC</h1>
 
-    <!-- Second REST call-->
-    <tr>
-        <h3>2) Returns a single Tweet, specified by the id parameter.</h3>
-        <ul style="list-style-type:none">
-            <h3>URL: https://api.twitter.com/1.1/statuses/show.json</h3>
-            <li>
-                <h4>Request Parameters:</h4>
-                <form action="TwitterGetView2.jsp" method="GET">
-                    <h4>id(*)</h4>
-                    <input type="text" id="rest2id" name="rest2id" />
-                    <h4>trim_user</h4>
-                    <INPUT type="radio" name="rest2q1" value="0" id="rest2q1_true">&nbsp;<label for="rest2q1_true">True</label><BR>
-                    <INPUT type="radio" name="rest2q1" value="1" id="rest2q1_false">&nbsp;<label for="rest2q1_false">False</label><BR>
-                    <h4>include_my_retweet</h4>
-                    <INPUT type="radio" name="rest2q2" value="0" id="rest2q2_true">&nbsp;<label for="rest2q2_true">True</label><BR>
-                    <INPUT type="radio" name="rest2q2" value="1" id="rest2q2_false">&nbsp;<label for="rest2q2_false">False</label><BR>
-                    <h4>include_entities</h4>
-                    <INPUT type="radio" name="rest2q3" value="0" id="rest2q3_true">&nbsp;<label for="rest2q3_true">True</label><BR>
-                    <INPUT type="radio" name="rest2q3" value="1" id="rest2q3_false">&nbsp;<label for="rest2q3_false">False</label><BR>
-                    <input type="submit" value="GET" />
-                </form>
-            </li>
-        </ul>
-    </tr>
+  <div id="videos">
+    <video id="localVideo" autoplay muted></video>
+    <video id="remoteVideo" autoplay></video>
+  </div>
 
-    <!-- Third REST call-->
-    <tr>
-        <h3> 3) Returns a collection of up to 100 user IDs belonging to users who have retweeted the tweet specified by the id parameter.</h3>
-        <ul style="list-style-type:none">
-            <h3>URL: https://api.twitter.com/1.1/statuses/retweeters/ids.json</h3>
-            <li>
-                <h4>Request Parameters:</h4>
-                <form action="TwitterGetView3.jsp" method="GET">
-                    <h4>id(*)</h4>
-                    <input type="text" id="rest3id" name="rest3id" />
-                    <h4>cursor</h4>
-                    <input type="text" id="rest3cursor" name="rest3cursor" />
-                    <h4>stringify_ids</h4>
-                    <INPUT type="radio" name="rest3q1" value="0" id="rest3q1_true">&nbsp;<label for="rest3q1_true">True</label><BR>
-                    <INPUT type="radio" name="rest3q1" value="1" id="rest3q1_false">&nbsp;<label for="rest3q1_false">False</label><BR>
-                    <input type="submit" value="GET" />
-                </form>
-            </li>
-        </ul>
-    </tr>
-
-    <!-- Fourth REST call-->
-    <tr>
-        <h3> 4) Returns fully-hydrated tweet objects for up to 100 tweets per request, as specified by comma-separated values passed to the id parameter.</h3>
-        <ul style="list-style-type:none">
-            <h3>URL: https://api.twitter.com/1.1/statuses/lookup.json</h3>
-            <li>
-                <h4>Request Parameters:</h4>
-                <form action="TwitterGetView4.jsp" method="GET">
-                    <h4>id(*)</h4>
-                    <input type="text" id="rest4id" name="rest4id" />
-                    <h4>include_entities</h4>
-                    <INPUT type="radio" name="rest4q1" value="0" id="rest4q1_true">&nbsp;<label for="rest4q1_true">True</label><BR>
-                    <INPUT type="radio" name="rest4q1" value="1" id="rest4q1_false">&nbsp;<label for="rest4q1_false">False</label><BR>
-                    <h4>trim_user</h4>
-                    <INPUT type="radio" name="rest4q2" value="0" id="rest4q2_true">&nbsp;<label for="rest4q2_true">True</label><BR>
-                    <INPUT type="radio" name="rest4q2" value="1" id="rest4q2_false">&nbsp;<label for="rest4q2_false">False</label><BR>
-                    <h4>map</h4>
-                    <INPUT type="radio" name="rest4q3" value="0" id="rest4q3_true">&nbsp;<label for="rest4q3_true">True</label><BR>
-                    <INPUT type="radio" name="rest4q3" value="1" id="rest4q3_false">&nbsp;<label for="rest4q3_false">False</label><BR>
-                    <input type="submit" value="GET" />
-                </form>
-            </li>
-        </ul>
-    </tr>
-
-    <!-- Fifth REST call-->
-    <tr>
-        <h3> 5) Returns a cursored collection of user IDs for every user the specified user is following (otherwise known as their "friends").</h3>
-        <ul style="list-style-type:none">
-            <h3>URL: https://api.twitter.com/1.1/friends/ids.json</h3>
-            <li>
-                <h4>Request Parameters:</h4>
-                <form action="TwitterGetView5.jsp" method="GET">
-                    <h4>user_id(*)</h4>
-                    <input type="text" id="rest5userid" name="rest5userid" />
-                    <h4>screen_name</h4>
-                    <input type="text" id="rest5screenname" name="rest5screenname" />
-                    <h4>cursor</h4>
-                    <input type="text" id="rest5cursor" name="rest5cursor" />
-                    <h4>stringify_ids</h4>
-                    <INPUT type="radio" name="rest5q1" value="0" id="rest5q1_true">&nbsp;<label for="rest5q1_true">True</label><BR>
-                    <INPUT type="radio" name="rest5q1" value="1" id="rest5q1_false">&nbsp;<label for="rest5q1_false">False</label><BR>
-                    <input type="submit" value="GET" />
-                </form>
-            </li>
-        </ul>
-    </tr>
-
-    <!-- Sixth REST call-->
-    <tr>
-        <h3> 6) Returns a cursored collection of user IDs for every user following the specified user.</h3>
-        <ul style="list-style-type:none">
-            <h3>URL: https://api.twitter.com/1.1/followers/ids.json</h3>
-            <li>
-                <h4>Request Parameters:</h4>
-                <form action="TwitterGetView6.jsp" method="GET">
-                    <h4>user_id(*)</h4>
-                    <input type="text" id="rest6userid" name="rest6userid" />
-                    <h4>screen_name</h4>
-                    <input type="text" id="rest6screenname" name="rest6screenname" />
-                    <h4>cursor</h4>
-                    <input type="text" id="rest6cursor" name="rest6cursor" />
-                    <h4>stringify_ids</h4>
-                    <INPUT type="radio" name="rest6q1" value="0" id="rest6q1_true">&nbsp;<label for="rest6q1_true">True</label><BR>
-                    <INPUT type="radio" name="rest6q1" value="1" id="rest6q1_false">&nbsp;<label for="rest6q1_false">False</label><BR>
-                    <input type="submit" value="GET" />
-                </form>
-            </li>
-        </ul>
-    </tr>
-
-    <!-- Seventh REST call-->
-    <tr>
-        <h3> 7) Returns a collection of numeric IDs for every user who has a pending request to follow the authenticating user.</h3>
-        <ul style="list-style-type:none">
-            <h3>URL: https://api.twitter.com/1.1/friendships/incoming.json</h3>
-            <li>
-                <h4>Request Parameters:</h4>
-                <form action="TwitterGetView7.jsp" method="GET">
-                    <h4>cursor</h4>
-                    <input type="text" id="rest7cursor" name="rest7cursor" />
-                    <h4>stringify_ids</h4>
-                    <INPUT type="radio" name="rest7q1" value="0" id="rest7q1_true">&nbsp;<label for="rest7q1_true">True</label><BR>
-                    <INPUT type="radio" name="rest7q1" value="1" id="rest7q1_false">&nbsp;<label for="rest7q1_false">False</label><BR>
-                    <input type="submit" value="GET" />
-                </form>
-            </li>
-        </ul>
-    </tr>
-
-    <!-- Eighth REST call-->
-    <tr>
-        <h3> 8) Returns a collection of numeric IDs for every protected user for whom the authenticating user has a pending follow request.</h3>
-        <ul style="list-style-type:none">
-            <h3>URL: https://api.twitter.com/1.1/friendships/outgoing.json</h3>
-            <li>
-                <h4>Request Parameters:</h4>
-                <form action="TwitterGetView8.jsp" method="GET">
-                    <h4>cursor</h4>
-                    <input type="text" id="rest8cursor" name="rest8cursor" />
-                    <h4>stringify_ids</h4>
-                    <INPUT type="radio" name="rest8q1" value="0" id="rest8q1_true">&nbsp;<label for="rest8q1_true">True</label><BR>
-                    <INPUT type="radio" name="rest8q1" value="1" id="rest8q1_false">&nbsp;<label for="rest8q1_false">False</label><BR>
-                    <input type="submit" value="GET" />
-                </form>
-            </li>
-        </ul>
-    </tr>
-
-</table>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/lib/adapter.js"></script>
+  <script src="js/main.js"></script>
 
 </body>
+
 </html>
